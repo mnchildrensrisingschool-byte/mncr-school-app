@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MNCR SCHOOL</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f1f5fb;
+  color: #172b4d;
+}
+
+header {
+  background: #0756b9;
+  color: white;
+  padding: 25px 15px;
+  text-align: center;
+}
+
+.logo {
+  width: 65px;
+  height: 65px;
+  background: white;
+  color: #0756b9;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin: auto auto 12px;
+}
+
+header h1 {
+  font-size: 25px;
+}
+
+header p {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 18px;
+}
+
+.welcome {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px #00000010;
+}
+
+.welcome h2 {
+  color: #0756b9;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  margin: 20px 0 14px;
+  font-size: 19px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: white;
+  padding: 22px 10px;
+  border-radius: 13px;
+  text-align: center;
+  box-shadow: 0 3px 10px #00000010;
+  cursor: pointer;
+  border: 1px solid #e5edf7;
+}
+
+.card:active {
+  background: #e3efff;
+}
+
+.icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  font-size: 15px;
+  color: #0756b9;
+}
+
+.card p {
+  font-size: 11px;
+  margin-top: 5px;
+  color: #64748b;
+}
+
+.features {
+  background: white;
+  padding: 18px;
+  border-radius: 13px;
+  margin-top: 20px;
+}
+
+.features p {
+  padding: 11px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+button {
+  background: #0756b9;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+footer {
+  background: #073b79;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 25px;
+  font-size: 12px;
+}
+
+#dashboard {
+  display: none;
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  margin-top: 20px;
+}
+
+#dashboard h2 {
+  color: #0756b9;
+}
+
+@media(max-width:350px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">MNCR</div>
+  <h1>MNCR SCHOOL</h1>
+  <p>MN CHILDRENS RISING SCHOOL</p>
+  <p>DEORA, KHATKHARI, MAUGANJ (M.P.)</p>
+</header>
+
+<div class="container">
+
+<div class="welcome">
+  <h2>Welcome to MNCR SCHOOL</h2>
+  <p>आपका स्वागत है | Your Future Starts Here</p>
+  <p style="margin-top:12px;">
+    Session 2026-27
+  </p>
+</div>
+
+<h2 class="section-title">Select Your Login</h2>
+
+<div class="grid">
+
+<div class="card" onclick="openDashboard('Admin')">
+  <div class="icon">👨‍💼</div>
+  <h3>Admin Login</h3>
+  <p>School Management</p>
+</div>
+
+<div class="card" onclick="openDashboard('Teacher')">
+  <div class="icon">👩‍🏫</div>
+  <h3>Teacher Login</h3>
+  <p>Teacher Dashboard</p>
+</div>
+
+<div class="card" onclick="openDashboard('Parent')">
+  <div class="icon">👨‍👩‍👧</div>
+  <h3>Parent Login</h3>
+  <p>Student Information</p>
+</div>
+
+<div class="card" onclick="openDashboard('Student')">
+  <div class="icon">🎓</div>
+  <h3>Student Login</h3>
+  <p>Learning Dashboard</p>
+</div>
+
+</div>
+
+<div id="dashboard">
+  <h2 id="dashboardTitle"></h2>
+  <p id="dashboardText" style="margin-top:12px;"></p>
+  <button onclick="closeDashboard()">Back to Home</button>
+</div>
+
+<h2 class="section-title">School Services</h2>
+
+<div class="features">
+  <p>📝 Online Admission</p>
+  <p>📅 Student Attendance</p>
+  <p>📚 Homework & Study Material</p>
+  <p>💰 School Fees Management</p>
+  <p>📊 Examination & Results</p>
+  <p>📢 School Notice Board</p>
+  <p>📞 Contact School</p>
+</div>
+
+</div>
+
+<footer>
+  <p>MN CHILDRENS RISING SCHOOL</p>
+  <p>Contact: 7290929593</p>
+  <p>Deora, Mauganj, Madhya Pradesh</p>
+  <p style="margin-top:10px;">© 2026 MNCR SCHOOL</p>
+</footer>
+
+<script>
+function openDashboard(role) {
+  document.getElementById("dashboard").style.display = "block";
+
+  document.getElementById("dashboardTitle").innerText =
+    role + " Dashboard";
+
+  document.getElementById("dashboardText").innerText =
+    "Welcome to MNCR SCHOOL " + role +
+    " Section. Login and database facilities will be connected in the next development stage.";
+
+  document.getElementById("dashboard").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function closeDashboard() {
+  document.getElementById("dashboard").style.display = "none";
+}
+</script>
+
+</body>
+</html>
