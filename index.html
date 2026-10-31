@@ -157,6 +157,40 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+  .login-box {
+    max-width: 400px;
+    margin: 25px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.login-box h2 {
+    color: #0756b9;
+    margin-bottom: 10px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 13px;
+    margin: 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 13px;
+    background: #0756b9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 16px;
+}
 </style>
 </head>
 
@@ -183,7 +217,7 @@ footer {
 
 <div class="grid">
 
-<div class="card" onclick="openDashboard('Admin')">
+<div class="card" onclick="openAdminLogin()">
   <div class="icon">👨‍💼</div>
   <h3>Admin Login</h3>
   <p>School Management</p>
@@ -208,7 +242,38 @@ footer {
 </div>
 
 </div>
+<!-- ADMIN LOGIN FORM -->
+<div id="adminLogin" class="login-box" style="display:none;">
 
+    <h2>Admin Login</h2>
+    <p>MN CHILDRENS RISING SCHOOL</p>
+
+    <input
+        type="email"
+        id="adminEmail"
+        placeholder="Enter Admin Email"
+        required
+    >
+
+    <input
+        type="password"
+        id="adminPassword"
+        placeholder="Enter Password"
+        required
+    >
+
+    <button onclick="adminLoginUser()">
+        Login
+    </button>
+
+    <p id="loginError" style="color:red;"></p>
+
+    <button onclick="closeAdminLogin()">
+        Back to Home
+    </button>
+
+</div>
+<!-- END ADMIN LOGIN FORM -->
 <div id="dashboard">
   <h2 id="dashboardTitle"></h2>
   <p id="dashboardText" style="margin-top:12px;"></p>
@@ -254,6 +319,19 @@ function openDashboard(role) {
 
 function closeDashboard() {
   document.getElementById("dashboard").style.display = "none";
+}
+  function openAdminLogin() {
+    document.querySelector(".grid").style.display = "none";
+    document.getElementById("adminLogin").style.display = "block";
+
+    document.getElementById("adminLogin").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+function closeAdminLogin() {
+    document.getElementById("adminLogin").style.display = "none";
+    document.querySelector(".grid").style.display = "grid";
 }
 </script>
 <script type="module">
