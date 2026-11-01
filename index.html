@@ -283,7 +283,7 @@ footer {
 <h2 class="section-title">School Services</h2>
 
 <div class="features">
-  <p>📝 Online Admission</p>
+  <p onclick="openAdmissionPopup()" style="cursor:pointer;">📝 Online Admission</p>
   <p>📅 Student Attendance</p>
   <p>📚 Homework & Study Material</p>
   <p>💰 School Fees Management</p>
@@ -412,7 +412,7 @@ window.adminLoginUser = async function() {
 };
 </script>
 <!-- ONLINE ADMISSION SECTION -->
-<section id="onlineAdmission" style="background:white;padding:25px;margin:20px 10px;border-radius:18px;">
+<section id="onlineAdmission" style="background:white;display:none;padding:25px;margin:20px 10px;border-radius:18px;">
   <h2 style="color:#0756ad;text-align:center;">Online Admission 2026-27</h2>
   <p style="text-align:center;">MN CHILDRENS RISING SCHOOL, DEORA</p>
 
@@ -532,6 +532,14 @@ document.getElementById("admissionForm").addEventListener("submit", function(e) 
 
   window.open(whatsappLink, "_blank");
 });
+function openAdmissionPopup() {
+  const form = document.getElementById("onlineAdmission");
+  form.style.display = "block";
+}
+
+function closeAdmissionPopup() {
+  document.getElementById("onlineAdmission").style.display = "none";
+}
 </script>
 </body>
 </html>
