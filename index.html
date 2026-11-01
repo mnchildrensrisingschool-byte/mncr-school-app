@@ -411,5 +411,127 @@ window.adminLoginUser = async function() {
 
 };
 </script>
+<!-- ONLINE ADMISSION SECTION -->
+<section id="onlineAdmission" style="background:white;padding:25px;margin:20px 10px;border-radius:18px;">
+  <h2 style="color:#0756ad;text-align:center;">Online Admission 2026-27</h2>
+  <p style="text-align:center;">MN CHILDRENS RISING SCHOOL, DEORA</p>
+
+  <form id="admissionForm">
+    <label>Student Name *</label>
+    <input id="studentName" type="text" required placeholder="Student Full Name">
+
+    <label>Date of Birth *</label>
+    <input id="dob" type="date" required>
+
+    <label>Admission For *</label>
+    <select id="admissionClass" required>
+      <option value="">Select Class</option>
+      <option>Nursery</option>
+      <option>LKG</option>
+      <option>UKG</option>
+      <option>Class 1</option>
+      <option>Class 2</option>
+      <option>Class 3</option>
+      <option>Class 4</option>
+      <option>Class 5</option>
+      <option>Class 6</option>
+      <option>Class 7</option>
+      <option>Class 8</option>
+      <option>Class 9 - Full Time Coaching</option>
+      <option>Class 10 - Full Time Coaching</option>
+    </select>
+
+    <label>Father's Name *</label>
+    <input id="fatherName" type="text" required>
+
+    <label>Mother's Name</label>
+    <input id="motherName" type="text">
+
+    <label>Mobile Number *</label>
+    <input id="parentMobile" type="tel" pattern="[0-9]{10}" maxlength="10" required placeholder="10 Digit Mobile Number">
+
+    <label>Full Address *</label>
+    <textarea id="studentAddress" required placeholder="Village, Post, District"></textarea>
+
+    <button type="submit" style="background:#0756ad;color:white;padding:14px;width:100%;border:0;border-radius:9px;font-size:17px;margin-top:15px;">
+      Submit Admission Application
+    </button>
+  </form>
+
+  <p id="admissionMessage" style="color:green;text-align:center;"></p>
+</section>
+
+<!-- CONTACT DETAILS -->
+<section id="contactDetails" style="background:white;padding:25px;margin:20px 10px;border-radius:18px;text-align:center;">
+  <h2 style="color:#0756ad;">Contact Us</h2>
+  <h3>MN CHILDRENS RISING SCHOOL</h3>
+
+  <p>📍 Deora, Khatkhari, Mauganj, Madhya Pradesh</p>
+
+  <p>📞 <a href="tel:7290929593">7290929593</a></p>
+
+  <p>📧 <a href="mailto:Mnchildrensrisingschool@gmail.com">
+    Mnchildrensrisingschool@gmail.com
+  </a></p>
+
+  <a href="https://wa.me/917290929593"
+     style="display:inline-block;background:#168b45;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;">
+     WhatsApp Us
+  </a>
+</section>
+
+<style>
+#onlineAdmission label {
+  display:block;
+  margin-top:14px;
+  font-weight:bold;
+  color:#24364b;
+}
+#onlineAdmission input,
+#onlineAdmission select,
+#onlineAdmission textarea {
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  margin-top:6px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:16px;
+}
+#onlineAdmission textarea {
+  min-height:85px;
+}
+</style>
+
+<script>
+document.getElementById("admissionForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const fields = [
+    ["Student Name", "studentName"],
+    ["Date of Birth", "dob"],
+    ["Admission For", "admissionClass"],
+    ["Father's Name", "fatherName"],
+    ["Mother's Name", "motherName"],
+    ["Mobile Number", "parentMobile"],
+    ["Address", "studentAddress"]
+  ];
+
+  let message = "MN CHILDRENS RISING SCHOOL - ADMISSION APPLICATION\n\n";
+
+  fields.forEach(function(field) {
+    message += field[0] + ": " +
+      document.getElementById(field[1]).value + "\n";
+  });
+
+  const whatsappLink =
+    "https://wa.me/917290929593?text=" + encodeURIComponent(message);
+
+  document.getElementById("admissionMessage").innerText =
+    "WhatsApp में आवेदन तैयार है। Send दबाकर स्कूल को भेजें।";
+
+  window.open(whatsappLink, "_blank");
+});
+</script>
 </body>
 </html>
