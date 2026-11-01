@@ -338,6 +338,9 @@ function closeAdminLogin() {
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+ import { getAuth, signInWithEmailAndPassword,signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -356,6 +359,57 @@ function closeAdminLogin() {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.adminLoginUser = async function() {
+
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value;
+    const errorBox = document.getElementById("loginError");
+
+    errorBox.innerText = "";
+
+    try {
+
+        const result = await signInWithEmailAndPassword(
+            auth, email, password
+        );
+
+        const user = result.user;
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists() ||
+            userSnap.data().role !== "admin") {
+
+            await signOut(auth);
+            errorBox.innerText = "Admin permission denied.";
+            return;
+        }
+
+        document.getElementById("adminLogin").style.display = "none";
+
+        document.getElementById("dashboard").style.display = "block";
+
+        document.getElementById("dashboardTitle").innerText =
+            "Admin Dashboard";
+
+        document.getElementById("dashboardText").innerText =
+            "Welcome to MN CHILDRENS RISING SCHOOL Admin Panel";
+
+        document.getElementById("dashboard").scrollIntoView({
+            behavior: "smooth"
+        });
+
+    } catch (error) {
+
+        errorBox.innerText = "Login Failed: " + error.message;
+
+    }
+
+};
 </script>
 </body>
 </html>
