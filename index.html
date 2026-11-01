@@ -55,7 +55,14 @@ small.muted{color:#64748b}.hidden{display:none!important}
 <h2 id="loginHeading">Login</h2><label>Email</label><input id="email" type="email" autocomplete="username">
 <label>Password</label><input id="password" type="password" autocomplete="current-password">
 <button onclick="login()">Login</button><button class="secondary" onclick="hideLogin()">Back</button><p id="loginMsg"></p>
-<small class="muted">Login account school administrator द्वारा बनाया जाएगा। Public registration उपलब्ध नहीं है।</small>
+<hr><h3>नया अकाउंट बनाएँ / Sign Up</h3>
+<p class="muted">अकाउंट बनाने के बाद Admin की मंजूरी जरूरी है। मंजूरी मिलने तक Login नहीं होगा।</p>
+<label>पूरा नाम</label><input id="signupName" maxlength="100" placeholder="अपना नाम लिखें">
+<label>Email</label><input id="signupEmail" type="email" placeholder="Email address">
+<label>Password (कम से कम 6 अक्षर)</label><input id="signupPassword" type="password" minlength="6" placeholder="Password">
+<label>Confirm Password</label><input id="signupPassword2" type="password" minlength="6" placeholder="Password दोबारा लिखें">
+<button onclick="signup()">Create Account</button><p id="signupMsg"></p>
+<small class="muted">Teacher, Parent और Student स्वयं Sign Up कर सकते हैं। Admin approval के बाद ही अकाउंट सक्रिय होगा।</small>
 </section>
 
 <section id="appPanel" class="panel">
@@ -87,8 +94,8 @@ small.muted{color:#64748b}.hidden{display:none!important}
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {getAuth,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import {getFirestore,doc,getDoc,collection,addDoc,getDocs,query,orderBy,where,serverTimestamp,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {getFirestore,doc,getDoc,collection,addDoc,getDocs,query,orderBy,where,serverTimestamp,deleteDoc,setDoc,updateDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {getStorage,ref,uploadBytes,getBlob,deleteObject} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
 const firebaseConfig={
@@ -102,7 +109,7 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),s
 let currentRole="",currentTab="";
 
 const adminTabs=[
- ["admissions","Admission Applications"],["notices","Notice Board"],["homework","Homework"],
+ ["approvals","🔔 Account Approvals"],["admissions","Admission Applications"],["notices","Notice Board"],["homework","Homework"],
  ["materials","Study Material"],["fees","Fees Structure"],["attendance","Attendance"],
  ["results","Examination & Results"],["documents","Documents"],["students","Students"],["teachers","Teachers"]
 ];
@@ -118,16 +125,60 @@ window.login=async()=>{
   const cred=await signInWithEmailAndPassword(auth,document.getElementById("email").value.trim(),document.getElementById("password").value);
   const snap=await getDoc(doc(db,"users",cred.user.uid));
   const expected=document.getElementById("loginBox").dataset.role;
-  if(!snap.exists()||snap.data().role!==expected){await signOut(auth);throw new Error("इस खाते को इस Login की अनुमति नहीं है।");}
+  if(!snap.exists()){await signOut(auth);throw new Error("Account record नहीं मिला। School Admin से संपर्क करें।");}
+  const account=snap.data();
+  if(account.status!=="approved" && account.role!=="admin") {await signOut(auth);throw new Error(account.status==="rejected"?"आपका अकाउंट Reject कर दिया गया है। School Admin से संपर्क करें।":"आपका अकाउंट बन गया है। Kindly wait for Admin approval.");}
+  if(account.role!==expected){await signOut(auth);throw new Error("इस खाते को इस Login की अनुमति नहीं है।");}
   currentRole=expected;document.getElementById("loginBox").style.display="none";
   document.getElementById("appPanel").style.display="block";document.getElementById("panelTitle").textContent=expected.toUpperCase()+" DASHBOARD";
   document.getElementById("who").textContent=cred.user.email;buildTabs();await renderTab((expected==="admin"?adminTabs:expected==="teacher"?teacherTabs:expected==="parent"?parentTabs:studentTabs)[0][0]);
  }catch(e){msg.textContent=e.message;}
 };
+window.signup=async()=>{
+ const msg=document.getElementById("signupMsg");msg.textContent="Account बनाया जा रहा है...";
+ const role=document.getElementById("loginBox").dataset.role;
+ if(!["teacher","parent","student"].includes(role)){msg.textContent="Admin account का public Sign Up बंद है।";return;}
+ const name=document.getElementById("signupName").value.trim();
+ const email=document.getElementById("signupEmail").value.trim().toLowerCase();
+ const password=document.getElementById("signupPassword").value;
+ const password2=document.getElementById("signupPassword2").value;
+ if(!name||!email||!password){msg.textContent="सभी जानकारी भरें।";return;}
+ if(password.length<6){msg.textContent="Password कम से कम 6 अक्षर का होना चाहिए।";return;}
+ if(password!==password2){msg.textContent="दोनों Password एक जैसे नहीं हैं।";return;}
+ try{
+  const cred=await createUserWithEmailAndPassword(auth,email,password);
+  const profile={uid:cred.user.uid,name,email,role,status:"pending",createdAt:serverTimestamp()};
+  await setDoc(doc(db,"users",cred.user.uid),profile);
+  await setDoc(doc(db,"signupRequests",cred.user.uid),{uid:cred.user.uid,name,email,requestedRole:role,status:"pending",createdAt:serverTimestamp()});
+  await signOut(auth);
+  msg.textContent="Account successfully created! Kindly wait for Admin approval. मंजूरी मिलने के बाद आप Login कर सकेंगे।";
+  document.getElementById("signupPassword").value="";document.getElementById("signupPassword2").value="";
+ }catch(e){msg.textContent="Sign Up नहीं हुआ: "+e.message;}
+};
+window.approveSignup=async(uid,role)=>{
+ if(currentRole!=="admin")return;
+ if(!confirm("इस अकाउंट को Approve करना है?"))return;
+ try{
+  await updateDoc(doc(db,"users",uid),{role,status:"approved",approvedAt:serverTimestamp(),approvedBy:auth.currentUser.uid});
+  await updateDoc(doc(db,"signupRequests",uid),{status:"approved",reviewedAt:serverTimestamp(),reviewedBy:auth.currentUser.uid});
+  await renderTab("approvals");
+ }catch(e){alert("Approve नहीं हुआ: "+e.message);}
+};
+window.rejectSignup=async(uid)=>{
+ if(currentRole!=="admin")return;
+ if(!confirm("इस अकाउंट को Reject करना है?"))return;
+ try{
+  await updateDoc(doc(db,"users",uid),{status:"rejected",rejectedAt:serverTimestamp(),rejectedBy:auth.currentUser.uid});
+  await updateDoc(doc(db,"signupRequests",uid),{status:"rejected",reviewedAt:serverTimestamp(),reviewedBy:auth.currentUser.uid});
+  await renderTab("approvals");
+ }catch(e){alert("Reject नहीं हुआ: "+e.message);}
+};
+
 window.logout=async()=>{await signOut(auth);currentRole="";document.getElementById("appPanel").style.display="none";document.getElementById("home").classList.remove("hidden");};
 
 function allowedTabs(){return currentRole==="admin"?adminTabs:currentRole==="teacher"?teacherTabs:currentRole==="parent"?parentTabs:studentTabs;}
-function buildTabs(){const el=document.getElementById("tabs");el.innerHTML="";allowedTabs().forEach(([id,label])=>{const b=document.createElement("button");b.className="tab";b.textContent=label;b.onclick=()=>renderTab(id);el.append(b);});}
+function buildTabs(){const el=document.getElementById("tabs");el.innerHTML="";allowedTabs().forEach(([id,label])=>{const b=document.createElement("button");b.className="tab";b.dataset.tabId=id;b.textContent=label;b.onclick=()=>renderTab(id);el.append(b);});if(currentRole==="admin")refreshApprovalBadge();}
+async function refreshApprovalBadge(){try{const s=await getDocs(query(collection(db,"signupRequests"),where("status","==","pending")));const b=document.querySelector(`[data-tab-id="approvals"]`);if(b)b.textContent=`🔔 Account Approvals (${s.size})`;}catch(e){console.warn("Approval count unavailable",e);}}
 const labels=Object.fromEntries([...adminTabs,...teacherTabs].map(x=>x));
 const schemas={
  notices:["title","message"],homework:["className","subject","title","details"],materials:["className","subject","title","details"],
@@ -140,6 +191,13 @@ window.renderTab=async(id)=>{
  currentTab=id;document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.textContent===labels[id]));
  const area=document.getElementById("workspace");area.innerHTML="<p>Loading...</p>";
  try{
+  if(id==="approvals" && currentRole==="admin"){
+   const pendingSnap=await getDocs(query(collection(db,"signupRequests"),where("status","==","pending")));
+   const pending=pendingSnap.docs.map(d=>({id:d.id,...d.data()}));
+   area.innerHTML=`<h3>🔔 Pending Account Approvals (${pending.length})</h3><p>नए Sign Up की मंजूरी यहाँ दें। Approve होने के बाद ही user Login कर पाएगा।</p>`;
+   area.innerHTML+=pending.length?pending.map(r=>`<article class="item"><p><b>नाम:</b> ${esc(r.name)}</p><p><b>Email:</b> ${esc(r.email)}</p><p><b>Role:</b> ${esc(r.requestedRole)}</p><small class="muted">Request ID: ${esc(r.uid)}</small><br><button onclick="approveSignup('${r.uid}','${r.requestedRole}')">Approve</button><button class="danger" onclick="rejectSignup('${r.uid}')">Reject</button></article>`).join(""):"<p class='notice'>कोई Pending Sign Up नहीं है।</p>";
+   return;
+  }
   let q;
   if(id==="admissions"){
    q=collection(db,id);
