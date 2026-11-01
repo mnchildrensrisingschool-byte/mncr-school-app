@@ -88,8 +88,8 @@ small.muted{color:#64748b}.hidden{display:none!important}
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import {getFirestore,doc,getDoc,collection,addDoc,getDocs,query,orderBy,serverTimestamp,updateDoc,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+import {getFirestore,doc,getDoc,collection,addDoc,getDocs,query,orderBy,where,serverTimestamp,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {getStorage,ref,uploadBytes,getBlob,deleteObject} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyBv--4SjO52-NbtbwmsKBOX6O2KavYujog",
@@ -140,43 +140,83 @@ window.renderTab=async(id)=>{
  currentTab=id;document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.textContent===labels[id]));
  const area=document.getElementById("workspace");area.innerHTML="<p>Loading...</p>";
  try{
-  const q=query(collection(db,id),orderBy("createdAt","desc"));const snap=await getDocs(q);const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+  let q;
+  if(id==="admissions"){
+   q=collection(db,id);
+  } else if(currentRole==="admin"){
+   q=query(collection(db,id),orderBy("createdAt","desc"));
+  } else {
+   q=query(collection(db,id),where("visibility","==","public"),orderBy("createdAt","desc"));
+  }
+  const snap=await getDocs(q);const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
   area.innerHTML=`<h3>${labels[id]||id}</h3>`;
-  if(currentRole==="admin"||currentRole==="teacher"&&["homework","materials","attendance","results","notices"].includes(id)){
+  if(id==="admissions"){
+   area.innerHTML+="<p>यहाँ ऑनलाइन प्रवेश आवेदन दिखाई देंगे।</p>";
+   area.innerHTML+=rows.length?rows.map(r=>admissionMarkup(r)).join(""):"<p class='notice'>अभी कोई आवेदन उपलब्ध नहीं है।</p>";
+   return;
+  }
+  if(currentRole==="admin"){
    area.innerHTML+=formMarkup(id);
   }
-  if(id==="admissions"){area.innerHTML+="<p>यहाँ ऑनलाइन आवेदन दिखाई देंगे। आवेदन रिकॉर्ड में निजी विद्यार्थी जानकारी होती है।</p>";}
   area.innerHTML+=rows.length?rows.map(r=>recordMarkup(id,r)).join(""):"<p class='notice'>अभी कोई रिकॉर्ड उपलब्ध नहीं है।</p>";
  }catch(e){area.innerHTML=`<p class="notice">डेटा लोड नहीं हुआ: ${esc(e.message)}<br>Firebase Rules और user role जाँचें।</p>`;}
 };
+
+function admissionMarkup(r){
+ return `<article class="item">
+ <p><b>विद्यार्थी का नाम:</b> ${esc(r.studentName)}</p>
+ <p><b>जन्मतिथि:</b> ${esc(r.dob)}</p>
+ <p><b>कक्षा:</b> ${esc(r.admissionClass)}</p>
+ <p><b>पिता का नाम:</b> ${esc(r.fatherName)}</p>
+ <p><b>माता का नाम:</b> ${esc(r.motherName)}</p>
+ <p><b>मोबाइल:</b> ${esc(r.parentMobile)}</p>
+ <p><b>पता:</b> ${esc(r.studentAddress)}</p>
+ <small class="muted">Application ID: ${esc(r.id)}</small>
+ ${currentRole==="admin"?`<button class="danger" onclick="removeRecord('admissions','${r.id}')">Delete</button>`:""}
+ </article>`;
+}
+
 function formMarkup(id){
  const fields=schemas[id]||[];return `<form id="recordForm" class="box"><h4>नया रिकॉर्ड जोड़ें</h4><div class="row">${fields.map(k=>`<label>${fieldLabels[k]||k}<input name="${k}" ${k==="date"?"type=date":""} ${["title","studentName","className"].includes(k)?"required":""}></label>`).join("")}</div>
+ <label>Visibility / कौन देख सकता है?</label>
+ <select name="visibility"><option value="private">Private – केवल Admin</option><option value="public">Public – सभी लोग</option></select>
  <label>File (optional)</label><input type="file" name="attachment"><button type="submit">Save Record</button><p id="recordMsg"></p></form>`;
 }
 function recordMarkup(id,r){
  const content=schemas[id]?.map(k=>`<p><b>${esc(fieldLabels[k]||k)}:</b> ${esc(r[k])}</p>`).join("")||"";
- const file=r.fileURL?`<p><a href="${esc(r.fileURL)}" target="_blank" rel="noopener">Open attached file</a></p>`:"";
+ const file=r.filePath?`<p><button type="button" onclick="downloadSecureFile('${esc(r.filePath)}','${esc(r.fileName||'school-file')}')">Open / Download attachment</button></p>`:"";
  const del=currentRole==="admin"?`<button class="danger" onclick="removeRecord('${id}','${r.id}')">Delete</button>`:"";
- return `<article class="item">${content}${file}<small class="muted">Record ID: ${esc(r.id)}</small>${del}</article>`;
+ const badge=r.visibility==="public"?"Public":"Private";
+ return `<article class="item">${content}<small class="muted">Visibility: ${badge} · Record ID: ${esc(r.id)}</small>${file}${del}</article>`;
 }
 document.addEventListener("submit",async e=>{
  if(e.target.id!=="recordForm")return;e.preventDefault();
  const id=currentTab,form=e.target,fd=new FormData(form),data={};
  (schemas[id]||[]).forEach(k=>data[k]=String(fd.get(k)||"").trim());
+ data.visibility=String(fd.get("visibility")||"private");
  data.createdAt=serverTimestamp();data.createdBy=auth.currentUser.uid;
  try{
   const file=fd.get("attachment");
-  if(file&&file.size){
-   if(file.size>10*1024*1024)throw new Error("File size 10 MB से कम रखें।");
-   const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_"),path=`schoolFiles/${id}/${Date.now()}_${safe}`;
-   const uploaded=await uploadBytes(ref(storage,path),file);data.fileURL=await getDownloadURL(uploaded.ref);data.filePath=path;data.fileName=file.name;
-  }
+  if(file&&file.size)throw new Error("File upload अभी चालू नहीं है। फिलहाल केवल टेक्स्ट रिकॉर्ड सेव करें।");
   await addDoc(collection(db,id),data);await renderTab(id);
  }catch(err){document.getElementById("recordMsg").textContent=err.message;}
 });
+window.downloadSecureFile=async(path,name)=>{
+ try{
+  const blob=await getBlob(ref(storage,path));
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
+ }catch(e){alert("File access नहीं मिला: "+e.message);}
+};
 window.removeRecord=async(id,recordId)=>{
  if(currentRole!=="admin"||!confirm("क्या आप यह रिकॉर्ड हटाना चाहते हैं?"))return;
- try{await deleteDoc(doc(db,id,recordId));await renderTab(id);}catch(e){alert("Delete नहीं हुआ: "+e.message);}
+ try{
+  const snap=await getDoc(doc(db,id,recordId));
+  if(snap.exists()&&snap.data().filePath){
+   try{await deleteObject(ref(storage,snap.data().filePath));}catch(fileErr){}
+  }
+  await deleteDoc(doc(db,id,recordId));await renderTab(id);
+ }catch(e){alert("Delete नहीं हुआ: "+e.message);}
 };
 window.openAdmission=()=>document.getElementById("admissionModal").style.display="flex";
 window.closeAdmission=()=>document.getElementById("admissionModal").style.display="none";
@@ -188,7 +228,7 @@ document.getElementById("admissionForm").addEventListener("submit",async e=>{
 });
 window.publicInfo=async id=>{
  const box=document.getElementById("publicResults");box.classList.remove("hidden");box.innerHTML=`<h3>${labels[id]}</h3><p>कृपया उपलब्ध सार्वजनिक जानकारी देखें।</p>`;
- try{const snap=await getDocs(query(collection(db,id),orderBy("createdAt","desc")));box.innerHTML+=snap.docs.map(d=>recordMarkup(id,{id:d.id,...d.data()})).join("")||"<p>अभी कोई सूचना उपलब्ध नहीं है।</p>";}
+ try{const snap=await getDocs(query(collection(db,id),where("visibility","==","public"),orderBy("createdAt","desc")));box.innerHTML+=snap.docs.map(d=>recordMarkup(id,{id:d.id,...d.data()})).join("")||"<p>अभी कोई सार्वजनिक सूचना उपलब्ध नहीं है।</p>";}
  catch(e){box.innerHTML+="<p>जानकारी अभी उपलब्ध नहीं है।</p>";}
 };
 </script>
