@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function admin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    // User profile: new public sign-ups can create only their own pending profile.
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || admin());
+      allow list: if admin();
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.role in ["teacher", "parent", "student"]
+        && request.resource.data.status == "pending"
+        && request.resource.data.email == request.auth.token.email;
+      allow update: if admin();
+      allow delete: if false;
+    }
+
+    // Sign-up requests: user can submit only their own pending request; only admin can review.
+    match /signupRequests/{uid} {
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.requestedRole in ["teacher", "parent", "student"]
+        && request.resource.data.status == "pending"
+        && request.resource.data.email == request.auth.token.email;
+      allow get, list: if admin();
+      allow update, delete: if admin();
+    }
+
+    // Online admission applications.
+    match /admissions/{id} {
+      allow create: if request.resource.data.keys().hasAll([
+        'studentName','dob','admissionClass','fatherName','motherName',
+        'parentMobile','studentAddress','submittedAt'
+      ]) && request.resource.data.keys().hasOnly([
+        'studentName','dob','admissionClass','fatherName','motherName',
+        'parentMobile','studentAddress','submittedAt'
+      ]) && request.resource.data.studentName is string
+        && request.resource.data.studentName.size() > 0
+        && request.resource.data.studentName.size() <= 100
+        && request.resource.data.dob is string
+        && request.resource.data.admissionClass is string
+        && request.resource.data.fatherName is string
+        && request.resource.data.motherName is string
+        && request.resource.data.parentMobile.matches('^[0-9]{10}$')
+        && request.resource.data.studentAddress is string
+        && request.resource.data.studentAddress.size() <= 500
+        && request.resource.data.submittedAt == request.time;
+      allow read, update, delete: if admin();
+    }
+
+    // Public school content can be read publicly; all writes remain admin-only.
+    match /{collectionName}/{documentId} {
+      allow read: if collectionName != "users"
+        && collectionName != "signupRequests"
+        && collectionName != "admissions"
+        && (admin() || resource.data.visibility == "public");
+      allow create: if collectionName != "users"
+        && collectionName != "signupRequests"
+        && collectionName != "admissions"
+        && admin() && request.resource.data.visibility in ["public", "private"];
+      allow update: if collectionName != "users"
+        && collectionName != "signupRequests"
+        && collectionName != "admissions"
+        && admin() && request.resource.data.visibility in ["public", "private"];
+      allow delete: if collectionName != "users"
+        && collectionName != "signupRequests"
+        && collectionName != "admissions" && admin();
+    }
+  }
+}
