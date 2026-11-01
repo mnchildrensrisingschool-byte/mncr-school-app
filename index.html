@@ -55,14 +55,14 @@ small.muted{color:#64748b}.hidden{display:none!important}
 <h2 id="loginHeading">Login</h2><label>Email</label><input id="email" type="email" autocomplete="username">
 <label>Password</label><input id="password" type="password" autocomplete="current-password">
 <button onclick="login()">Login</button><button class="secondary" onclick="hideLogin()">Back</button><p id="loginMsg"></p>
-<hr><h3>नया अकाउंट बनाएँ / Sign Up</h3>
+<div id="signupArea" style="display:none"><hr><h3>नया अकाउंट बनाएँ / Sign Up</h3>
 <p class="muted">अकाउंट बनाने के बाद Admin की मंजूरी जरूरी है। मंजूरी मिलने तक Login नहीं होगा।</p>
 <label>पूरा नाम</label><input id="signupName" maxlength="100" placeholder="अपना नाम लिखें">
 <label>Email</label><input id="signupEmail" type="email" placeholder="Email address">
 <label>Password (कम से कम 6 अक्षर)</label><input id="signupPassword" type="password" minlength="6" placeholder="Password">
 <label>Confirm Password</label><input id="signupPassword2" type="password" minlength="6" placeholder="Password दोबारा लिखें">
 <button onclick="signup()">Create Account</button><p id="signupMsg"></p>
-<small class="muted">Teacher, Parent और Student स्वयं Sign Up कर सकते हैं। Admin approval के बाद ही अकाउंट सक्रिय होगा।</small>
+<small class="muted">Teacher, Parent और Student स्वयं Sign Up कर सकते हैं। Admin approval के बाद ही अकाउंट सक्रिय होगा।</small></div>
 </section>
 
 <section id="appPanel" class="panel">
@@ -117,7 +117,7 @@ const teacherTabs=[["homework","Homework"],["materials","Study Material"],["atte
 const parentTabs=[["notices","Notice Board"],["homework","Homework"],["materials","Study Material"],["fees","Fees Structure"],["results","Results"],["attendance","Attendance"],["documents","Documents"]];
 const studentTabs=parentTabs;
 
-window.showLogin=(role)=>{document.getElementById("home").classList.add("hidden");document.getElementById("loginBox").style.display="block";document.getElementById("loginHeading").textContent=role[0].toUpperCase()+role.slice(1)+" Login";document.getElementById("loginBox").dataset.role=role;};
+window.showLogin=(role)=>{const selectedRole=String(role||"").toLowerCase();document.getElementById("home").classList.add("hidden");document.getElementById("loginBox").style.display="block";document.getElementById("loginHeading").textContent=selectedRole.charAt(0).toUpperCase()+selectedRole.slice(1)+" Login";document.getElementById("loginBox").dataset.role=selectedRole;const signupArea=document.getElementById("signupArea");if(signupArea)signupArea.style.display=(["teacher","parent","student"].includes(selectedRole)?"block":"none");};
 window.hideLogin=()=>{document.getElementById("loginBox").style.display="none";document.getElementById("home").classList.remove("hidden");};
 window.login=async()=>{
  const msg=document.getElementById("loginMsg");msg.textContent="Checking...";
