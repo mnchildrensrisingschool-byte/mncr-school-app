@@ -1,235 +1,828 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MN CHILDRENS RISING SCHOOL</title>
 <style>
 :root{--blue:#0756b9;--dark:#073b79;--bg:#f1f5fb;--ink:#172b4d}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
 header{background:var(--blue);color:white;text-align:center;padding:22px 12px}
 .logo{width:64px;height:64px;border-radius:50%;background:white;color:var(--blue);display:grid;place-items:center;font-weight:bold;margin:auto auto 10px}
-h1{font-size:23px;margin:5px}header p{margin:5px;font-size:13px}
-.wrap{max-width:1050px;margin:auto;padding:16px}.welcome,.panel,.card,.box{background:white;border-radius:14px;padding:18px;box-shadow:0 3px 12px #00000010;margin-bottom:16px}
-.welcome{text-align:center}.welcome h2,.panel h2{color:var(--blue)}
+h1{font-size:23px;margin:5px}
+header p{margin:5px;font-size:13px}
+.wrap{max-width:1050px;margin:auto;padding:16px}
+.welcome,.panel,.card,.box{background:white;border-radius:14px;padding:18px;box-shadow:0 3px 12px #00000010;margin-bottom:16px}
+.welcome{text-align:center}
+.welcome h2,.panel h2{color:var(--blue)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
-.card{text-align:center;cursor:pointer;border:1px solid #e5edf7}.card .icon{font-size:30px}.card h3{font-size:15px;color:var(--blue)}
+.card{text-align:center;cursor:pointer;border:1px solid #e5edf7}
+.card .icon{font-size:30px}
+.card h3{font-size:15px;color:var(--blue)}
 button,.btn{background:var(--blue);color:white;border:0;border-radius:8px;padding:11px 15px;cursor:pointer;margin:4px 2px}
-button.secondary{background:#64748b}button.danger{background:#b42318}
+button.secondary{background:#64748b}
+button.danger{background:#b42318}
 input,select,textarea{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
-label{font-weight:bold;font-size:14px}table{width:100%;border-collapse:collapse;background:white;margin-top:12px}
-th,td{border:1px solid #dbe3ee;padding:8px;text-align:left;font-size:13px;vertical-align:top}th{background:#eaf2ff}
-#loginBox,#appPanel,#admissionModal{display:none}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+label{font-weight:bold;font-size:14px}
+table{width:100%;border-collapse:collapse;background:white;margin-top:12px}
+th,td{border:1px solid #dbe3ee;padding:8px;text-align:left;font-size:13px;vertical-align:top}
+th{background:#eaf2ff}
+#loginBox,#appPanel,#admissionModal{display:none}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
 .tab{background:#e7effb;color:#123;padding:9px 12px;border-radius:8px;cursor:pointer}
-.tab.active{background:var(--blue);color:white}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.tab.active{background:var(--blue);color:white}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
 .item{border:1px solid #dbe3ee;padding:12px;border-radius:9px;margin:8px 0;background:#fff}
 .notice{background:#eff6ff;padding:10px;border-radius:8px;margin:8px 0}
 .modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:15px;z-index:20}
 .modal>div{background:white;border-radius:14px;padding:20px;width:min(520px,100%);max-height:90vh;overflow:auto}
 footer{text-align:center;background:var(--dark);color:white;padding:20px;margin-top:25px;font-size:13px}
-small.muted{color:#64748b}.hidden{display:none!important}
+small.muted{color:#64748b}
+.hidden{display:none!important}
 @media(max-width:520px){.wrap{padding:10px}table{display:block;overflow-x:auto}}
 </style>
 </head>
+
 <body>
-<header><div class="logo">MNCR</div><h1>MN CHILDRENS RISING SCHOOL</h1>
-<p>DEORA, KHATKHARI, MAUGANJ (M.P.)</p><p>Session 2026–27</p></header>
+
+<header>
+<div class="logo">MNCR</div>
+<h1>MN CHILDRENS RISING SCHOOL</h1>
+<p>DEORA, KHATKHARI, MAUGANJ (M.P.)</p>
+<p>Session 2026–27</p>
+</header>
+
 <main class="wrap">
-<section class="welcome"><h2>Welcome to MNCR SCHOOL</h2><p>आपका स्वागत है | Your Future Starts Here</p>
-<p>बच्चों के सर्वांगीण विकास पर विशेष ध्यान</p></section>
+
+<section class="welcome">
+<h2>Welcome to MNCR SCHOOL</h2>
+<p>आपका स्वागत है | Your Future Starts Here</p>
+<p>बच्चों के सर्वांगीण विकास पर विशेष ध्यान</p>
+</section>
+
 <section id="home">
-<h2>Login / लॉगिन</h2><div class="grid">
-<div class="card" onclick="showLogin('admin')"><div class="icon">👨‍💼</div><h3>Admin Login</h3></div>
-<div class="card" onclick="showLogin('teacher')"><div class="icon">👩‍🏫</div><h3>Teacher Login</h3></div>
-<div class="card" onclick="showLogin('parent')"><div class="icon">👨‍👩‍👧</div><h3>Parent Login</h3></div>
-<div class="card" onclick="showLogin('student')"><div class="icon">🎓</div><h3>Student Login</h3></div>
+
+<h2>Login / लॉगिन</h2>
+
+<div class="grid">
+<div class="card" onclick="showLogin('admin')">
+<div class="icon">👨‍💼</div><h3>Admin Login</h3>
 </div>
-<h2>School Services</h2><div class="grid">
-<div class="card" onclick="openAdmission()"><div class="icon">📝</div><h3>Online Admission</h3></div>
-<div class="card" onclick="publicInfo('notices')"><div class="icon">📢</div><h3>Notice Board</h3></div>
-<div class="card" onclick="publicInfo('homework')"><div class="icon">📚</div><h3>Homework</h3></div>
-<div class="card" onclick="publicInfo('fees')"><div class="icon">💰</div><h3>Fees Structure</h3></div>
-<div class="card" onclick="document.getElementById('contact').scrollIntoView()"><div class="icon">☎️</div><h3>Contact School</h3></div>
-</div><div id="publicResults" class="panel hidden"></div></section>
+
+<div class="card" onclick="showLogin('teacher')">
+<div class="icon">👩‍🏫</div><h3>Teacher Login</h3>
+</div>
+
+<div class="card" onclick="showLogin('parent')">
+<div class="icon">👨‍👩‍👧</div><h3>Parent Login</h3>
+</div>
+
+<div class="card" onclick="showLogin('student')">
+<div class="icon">🎓</div><h3>Student Login</h3>
+</div>
+</div>
+
+<h2>School Services</h2>
+
+<div class="grid">
+<div class="card" onclick="openAdmission()">
+<div class="icon">📝</div><h3>Online Admission</h3>
+</div>
+
+<div class="card" onclick="publicInfo('notices')">
+<div class="icon">📢</div><h3>Notice Board</h3>
+</div>
+
+<div class="card" onclick="publicInfo('homework')">
+<div class="icon">📚</div><h3>Homework</h3>
+</div>
+
+<div class="card" onclick="publicInfo('fees')">
+<div class="icon">💰</div><h3>Fees Structure</h3>
+</div>
+
+<div class="card" onclick="document.getElementById('contact').scrollIntoView()">
+<div class="icon">☎️</div><h3>Contact School</h3>
+</div>
+</div>
+
+<div id="publicResults" class="panel hidden"></div>
+
+</section>
 
 <section id="loginBox" class="panel">
-<h2 id="loginHeading">Login</h2><label>Email</label><input id="email" type="email" autocomplete="username">
-<label>Password</label><input id="password" type="password" autocomplete="current-password">
-<button onclick="login()">Login</button><button class="secondary" onclick="hideLogin()">Back</button><p id="loginMsg"></p>
-<small class="muted">Login account school administrator द्वारा बनाया जाएगा। Public registration उपलब्ध नहीं है।</small>
+
+<h2 id="loginHeading">Login</h2>
+
+<label>Email</label>
+<input id="email" type="email" autocomplete="username">
+
+<label>Password</label>
+<input id="password" type="password" autocomplete="current-password">
+
+<button onclick="login()">Login</button>
+<button class="secondary" onclick="hideLogin()">Back</button>
+
+<p id="loginMsg"></p>
+
+<small class="muted">
+Login account school administrator द्वारा बनाया जाएगा।
+Public registration उपलब्ध नहीं है।
+</small>
+
 </section>
 
 <section id="appPanel" class="panel">
-<div class="row" style="align-items:center"><div><h2 id="panelTitle">Dashboard</h2><p id="who"></p></div><div style="text-align:right"><button class="secondary" onclick="logout()">Logout</button></div></div>
-<div class="tabs" id="tabs"></div><div id="workspace"></div>
+
+<div class="row" style="align-items:center">
+<div>
+<h2 id="panelTitle">Dashboard</h2>
+<p id="who"></p>
+</div>
+
+<div style="text-align:right">
+<button class="secondary" onclick="logout()">Logout</button>
+</div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div id="workspace"></div>
+
 </section>
 
-<section id="contact" class="panel" style="text-align:center"><h2>Contact Us</h2>
-<p>MN CHILDRENS RISING SCHOOL</p><p>Deora, Khatkhari, Mauganj, Madhya Pradesh</p>
-<p>📞 <a href="tel:7290929593">7290929593</a></p>
-<p>✉️ <a href="mailto:Mnchildrensrisingschool@gmail.com">Mnchildrensrisingschool@gmail.com</a></p>
-<a href="https://wa.me/917290929593">WhatsApp Us</a></section>
-</main>
-<footer>MN CHILDRENS RISING SCHOOL · Deora, Mauganj, Madhya Pradesh · © 2026</footer>
+<section id="contact" class="panel" style="text-align:center">
 
-<div class="modal" id="admissionModal"><div><button class="danger" style="float:right" onclick="closeAdmission()">✕</button>
-<h2>Online Admission 2026–27</h2><p>MN CHILDRENS RISING SCHOOL, DEORA</p>
+<h2>Contact Us</h2>
+<p>MN CHILDRENS RISING SCHOOL</p>
+<p>Deora, Khatkhari, Mauganj, Madhya Pradesh</p>
+
+<p>📞 <a href="tel:7290929593">7290929593</a></p>
+
+<p>✉️
+<a href="mailto:Mnchildrensrisingschool@gmail.com">
+Mnchildrensrisingschool@gmail.com
+</a>
+</p>
+
+<a href="https://wa.me/917290929593">WhatsApp Us</a>
+
+</section>
+
+</main>
+
+<footer>
+MN CHILDRENS RISING SCHOOL · Deora, Mauganj, Madhya Pradesh · © 2026
+</footer>
+
+<div class="modal" id="admissionModal">
+<div>
+
+<button class="danger" style="float:right" onclick="closeAdmission()">✕</button>
+
+<h2>Online Admission 2026–27</h2>
+<p>MN CHILDRENS RISING SCHOOL, DEORA</p>
+
 <form id="admissionForm">
-<label>Student Name *</label><input id="aName" required maxlength="100">
-<label>Date of Birth *</label><input id="aDob" type="date" required>
-<label>Admission For *</label><select id="aClass" required><option value="">Select Class</option>
-<option>Nursery</option><option>LKG</option><option>UKG</option>
-<option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9 - Full Time Coaching</option><option>Class 10 - Full Time Coaching</option></select>
-<label>Father's Name *</label><input id="aFather" required>
-<label>Mother's Name</label><input id="aMother">
-<label>Mobile Number *</label><input id="aMobile" required pattern="[0-9]{10}" maxlength="10">
-<label>Full Address *</label><textarea id="aAddress" required maxlength="500"></textarea>
-<button type="submit">Submit Application</button><p id="admissionMsg"></p></form></div></div>
+
+<label>Student Name *</label>
+<input id="aName" required maxlength="100">
+
+<label>Date of Birth *</label>
+<input id="aDob" type="date" required>
+
+<label>Admission For *</label>
+<select id="aClass" required>
+<option value="">Select Class</option>
+<option>Nursery</option>
+<option>LKG</option>
+<option>UKG</option>
+<option>Class 1</option>
+<option>Class 2</option>
+<option>Class 3</option>
+<option>Class 4</option>
+<option>Class 5</option>
+<option>Class 6</option>
+<option>Class 7</option>
+<option>Class 8</option>
+<option>Class 9 - Full Time Coaching</option>
+<option>Class 10 - Full Time Coaching</option>
+</select>
+
+<label>Father's Name *</label>
+<input id="aFather" required>
+
+<label>Mother's Name</label>
+<input id="aMother">
+
+<label>Mobile Number *</label>
+<input id="aMobile" required pattern="[0-9]{10}" maxlength="10">
+
+<label>Full Address *</label>
+<textarea id="aAddress" required maxlength="500"></textarea>
+
+<button type="submit">Submit Application</button>
+<p id="admissionMsg"></p>
+
+</form>
+</div>
+</div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {getAuth,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import {getFirestore,doc,getDoc,collection,addDoc,getDocs,query,orderBy,where,serverTimestamp,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import {getStorage,ref,uploadBytes,getBlob,deleteObject} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
-const firebaseConfig={
- apiKey:"AIzaSyBv--4SjO52-NbtbwmsKBOX6O2KavYujog",
- authDomain:"mncr-school.firebaseapp.com",projectId:"mncr-school",
- storageBucket:"mncr-school.firebasestorage.app",
- messagingSenderId:"271015954847",appId:"1:271015954847:web:863ae1199267dccd2ad5aa",
- measurementId:"G-LQ3LY8YY4Y"
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+collection,
+addDoc,
+getDocs,
+query,
+orderBy,
+where,
+serverTimestamp,
+deleteDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+getStorage,
+ref,
+getBlob,
+deleteObject
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+
+const firebaseConfig = {
+apiKey:"AIzaSyBv--4SjO52-NbtbwmsKBOX6O2KavYujog",
+authDomain:"mncr-school.firebaseapp.com",
+projectId:"mncr-school",
+storageBucket:"mncr-school.firebasestorage.app",
+messagingSenderId:"271015954847",
+appId:"1:271015954847:web:863ae1199267dccd2ad5aa",
+measurementId:"G-LQ3LY8YY4Y"
 };
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
-let currentRole="",currentTab="";
 
-const adminTabs=[
- ["admissions","Admission Applications"],["notices","Notice Board"],["homework","Homework"],
- ["materials","Study Material"],["fees","Fees Structure"],["attendance","Attendance"],
- ["results","Examination & Results"],["documents","Documents"],["students","Students"],["teachers","Teachers"]
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+let currentRole = "";
+let currentTab = "";
+
+
+const adminTabs = [
+["admissions","Admission Applications"],
+["notices","Notice Board"],
+["homework","Homework"],
+["materials","Study Material"],
+["fees","Fees Structure"],
+["attendance","Attendance"],
+["results","Examination & Results"],
+["documents","Documents"],
+["students","Students"],
+["teachers","Teachers"]
 ];
-const teacherTabs=[["homework","Homework"],["materials","Study Material"],["attendance","Attendance"],["results","Results"],["notices","Notice Board"]];
-const parentTabs=[["notices","Notice Board"],["homework","Homework"],["materials","Study Material"],["fees","Fees Structure"],["results","Results"],["attendance","Attendance"],["documents","Documents"]];
-const studentTabs=parentTabs;
 
-window.showLogin=(role)=>{document.getElementById("home").classList.add("hidden");document.getElementById("loginBox").style.display="block";document.getElementById("loginHeading").textContent=role[0].toUpperCase()+role.slice(1)+" Login";document.getElementById("loginBox").dataset.role=role;};
-window.hideLogin=()=>{document.getElementById("loginBox").style.display="none";document.getElementById("home").classList.remove("hidden");};
-window.login=async()=>{
- const msg=document.getElementById("loginMsg");msg.textContent="Checking...";
- try{
-  const cred=await signInWithEmailAndPassword(auth,document.getElementById("email").value.trim(),document.getElementById("password").value);
-  const snap=await getDoc(doc(db,"users",cred.user.uid));
-  const expected=document.getElementById("loginBox").dataset.role;
-  if(!snap.exists()||snap.data().role!==expected){await signOut(auth);throw new Error("इस खाते को इस Login की अनुमति नहीं है।");}
-  currentRole=expected;document.getElementById("loginBox").style.display="none";
-  document.getElementById("appPanel").style.display="block";document.getElementById("panelTitle").textContent=expected.toUpperCase()+" DASHBOARD";
-  document.getElementById("who").textContent=cred.user.email;buildTabs();await renderTab((expected==="admin"?adminTabs:expected==="teacher"?teacherTabs:expected==="parent"?parentTabs:studentTabs)[0][0]);
- }catch(e){msg.textContent=e.message;}
-};
-window.logout=async()=>{await signOut(auth);currentRole="";document.getElementById("appPanel").style.display="none";document.getElementById("home").classList.remove("hidden");};
+const teacherTabs = [
+["homework","Homework"],
+["materials","Study Material"],
+["attendance","Attendance"],
+["results","Results"],
+["notices","Notice Board"]
+];
 
-function allowedTabs(){return currentRole==="admin"?adminTabs:currentRole==="teacher"?teacherTabs:currentRole==="parent"?parentTabs:studentTabs;}
-function buildTabs(){const el=document.getElementById("tabs");el.innerHTML="";allowedTabs().forEach(([id,label])=>{const b=document.createElement("button");b.className="tab";b.textContent=label;b.onclick=()=>renderTab(id);el.append(b);});}
-const labels=Object.fromEntries([...adminTabs,...teacherTabs].map(x=>x));
-const schemas={
- notices:["title","message"],homework:["className","subject","title","details"],materials:["className","subject","title","details"],
- fees:["className","feeAmount","description"],attendance:["date","className","studentName","status"],results:["examName","className","studentName","marks","remarks"],
- documents:["studentName","documentType","details"],students:["studentName","className","fatherName","parentMobile"],teachers:["teacherName","subject","mobile"]
-};
-const fieldLabels={title:"Title",message:"Notice / Message",className:"Class",subject:"Subject",details:"Details",feeAmount:"Fee Amount (₹)",description:"Description",date:"Date",studentName:"Student Name",status:"Attendance Status",examName:"Exam Name",marks:"Marks",remarks:"Remarks",documentType:"Document Type",fatherName:"Father's Name",parentMobile:"Parent Mobile",teacherName:"Teacher Name",mobile:"Mobile"};
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-window.renderTab=async(id)=>{
- currentTab=id;document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.textContent===labels[id]));
- const area=document.getElementById("workspace");area.innerHTML="<p>Loading...</p>";
- try{
-  let q;
-  if(id==="admissions"){
-   q=collection(db,id);
-  } else if(currentRole==="admin"){
-   q=query(collection(db,id),orderBy("createdAt","desc"));
-  } else {
-   q=query(collection(db,id),where("visibility","==","public"),orderBy("createdAt","desc"));
-  }
-  const snap=await getDocs(q);const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-  area.innerHTML=`<h3>${labels[id]||id}</h3>`;
-  if(id==="admissions"){
-   area.innerHTML+="<p>यहाँ ऑनलाइन प्रवेश आवेदन दिखाई देंगे।</p>";
-   area.innerHTML+=rows.length?rows.map(r=>admissionMarkup(r)).join(""):"<p class='notice'>अभी कोई आवेदन उपलब्ध नहीं है।</p>";
-   return;
-  }
-  if(currentRole==="admin"){
-   area.innerHTML+=formMarkup(id);
-  }
-  area.innerHTML+=rows.length?rows.map(r=>recordMarkup(id,r)).join(""):"<p class='notice'>अभी कोई रिकॉर्ड उपलब्ध नहीं है।</p>";
- }catch(e){area.innerHTML=`<p class="notice">डेटा लोड नहीं हुआ: ${esc(e.message)}<br>Firebase Rules और user role जाँचें।</p>`;}
+const parentTabs = [
+["notices","Notice Board"],
+["homework","Homework"],
+["materials","Study Material"],
+["fees","Fees Structure"],
+["results","Results"],
+["attendance","Attendance"],
+["documents","Documents"]
+];
+
+const studentTabs = parentTabs;
+
+
+window.showLogin = (role) => {
+document.getElementById("home").classList.add("hidden");
+document.getElementById("loginBox").style.display = "block";
+document.getElementById("loginHeading").textContent =
+role[0].toUpperCase()+role.slice(1)+" Login";
+document.getElementById("loginBox").dataset.role = role;
 };
 
-function admissionMarkup(r){
- return `<article class="item">
- <p><b>विद्यार्थी का नाम:</b> ${esc(r.studentName)}</p>
- <p><b>जन्मतिथि:</b> ${esc(r.dob)}</p>
- <p><b>कक्षा:</b> ${esc(r.admissionClass)}</p>
- <p><b>पिता का नाम:</b> ${esc(r.fatherName)}</p>
- <p><b>माता का नाम:</b> ${esc(r.motherName)}</p>
- <p><b>मोबाइल:</b> ${esc(r.parentMobile)}</p>
- <p><b>पता:</b> ${esc(r.studentAddress)}</p>
- <small class="muted">Application ID: ${esc(r.id)}</small>
- ${currentRole==="admin"?`<button class="danger" onclick="removeRecord('admissions','${r.id}')">Delete</button>`:""}
- </article>`;
+
+window.hideLogin = () => {
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("home").classList.remove("hidden");
+};
+
+
+window.login = async () => {
+
+const msg = document.getElementById("loginMsg");
+msg.textContent = "Checking...";
+
+try {
+
+const cred = await signInWithEmailAndPassword(
+auth,
+document.getElementById("email").value.trim(),
+document.getElementById("password").value
+);
+
+const snap = await getDoc(doc(db,"users",cred.user.uid));
+
+const expected = document.getElementById("loginBox").dataset.role;
+
+if(!snap.exists() || snap.data().role !== expected) {
+await signOut(auth);
+throw new Error("इस खाते को इस Login की अनुमति नहीं है।");
 }
 
-function formMarkup(id){
- const fields=schemas[id]||[];return `<form id="recordForm" class="box"><h4>नया रिकॉर्ड जोड़ें</h4><div class="row">${fields.map(k=>`<label>${fieldLabels[k]||k}<input name="${k}" ${k==="date"?"type=date":""} ${["title","studentName","className"].includes(k)?"required":""}></label>`).join("")}</div>
- <label>Visibility / कौन देख सकता है?</label>
- <select name="visibility"><option value="private">Private – केवल Admin</option><option value="public">Public – सभी लोग</option></select>
- <label>File (optional)</label><input type="file" name="attachment"><button type="submit">Save Record</button><p id="recordMsg"></p></form>`;
+currentRole = expected;
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("appPanel").style.display = "block";
+
+document.getElementById("panelTitle").textContent =
+expected.toUpperCase()+" DASHBOARD";
+
+document.getElementById("who").textContent = cred.user.email;
+
+buildTabs();
+
+await renderTab(
+(expected==="admin"?adminTabs:
+expected==="teacher"?teacherTabs:
+expected==="parent"?parentTabs:studentTabs)[0][0]
+);
+
+} catch(e) {
+msg.textContent = e.message;
 }
-function recordMarkup(id,r){
- const content=schemas[id]?.map(k=>`<p><b>${esc(fieldLabels[k]||k)}:</b> ${esc(r[k])}</p>`).join("")||"";
- const file=r.filePath?`<p><button type="button" onclick="downloadSecureFile('${esc(r.filePath)}','${esc(r.fileName||'school-file')}')">Open / Download attachment</button></p>`:"";
- const del=currentRole==="admin"?`<button class="danger" onclick="removeRecord('${id}','${r.id}')">Delete</button>`:"";
- const badge=r.visibility==="public"?"Public":"Private";
- return `<article class="item">${content}<small class="muted">Visibility: ${badge} · Record ID: ${esc(r.id)}</small>${file}${del}</article>`;
+
+};
+
+
+window.logout = async () => {
+await signOut(auth);
+currentRole = "";
+document.getElementById("appPanel").style.display = "none";
+document.getElementById("home").classList.remove("hidden");
+};
+
+
+function allowedTabs() {
+return currentRole==="admin"?adminTabs:
+currentRole==="teacher"?teacherTabs:
+currentRole==="parent"?parentTabs:studentTabs;
 }
+
+
+function buildTabs() {
+
+const el = document.getElementById("tabs");
+el.innerHTML = "";
+
+allowedTabs().forEach(([id,label]) => {
+
+const b = document.createElement("button");
+b.className = "tab";
+b.textContent = label;
+b.onclick = () => renderTab(id);
+
+el.append(b);
+
+});
+
+}
+
+
+const labels = Object.fromEntries([...adminTabs,...teacherTabs].map(x=>x));
+
+
+const schemas = {
+
+notices:["title","message"],
+
+homework:["className","subject","title","details"],
+
+materials:["className","subject","title","details"],
+
+fees:["className","feeAmount","description"],
+
+attendance:["date","className","studentName","status"],
+
+results:["examName","className","studentName","marks","remarks"],
+
+documents:["studentName","documentType","details"],
+
+students:["studentName","className","fatherName","parentMobile"],
+
+teachers:["teacherName","subject","mobile"]
+
+};
+
+
+const fieldLabels = {
+
+title:"Title",
+message:"Notice / Message",
+className:"Class",
+subject:"Subject",
+details:"Details",
+feeAmount:"Fee Amount (₹)",
+description:"Description",
+date:"Date",
+studentName:"Student Name",
+status:"Attendance Status",
+examName:"Exam Name",
+marks:"Marks",
+remarks:"Remarks",
+documentType:"Document Type",
+fatherName:"Father's Name",
+parentMobile:"Parent Mobile",
+teacherName:"Teacher Name",
+mobile:"Mobile"
+
+};
+
+
+function esc(s) {
+return String(s??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c]));
+}
+
+
+window.renderTab = async (id) => {
+
+currentTab = id;
+
+document.querySelectorAll(".tab").forEach(b =>
+b.classList.toggle("active",b.textContent===labels[id])
+);
+
+const area = document.getElementById("workspace");
+area.innerHTML = "<p>Loading...</p>";
+
+try {
+
+let q;
+
+if(id==="admissions") {
+q = collection(db,id);
+}
+else if(currentRole==="admin") {
+q = query(collection(db,id),orderBy("createdAt","desc"));
+}
+else {
+q = query(
+collection(db,id),
+where("visibility","==","public")
+);
+}
+
+const snap = await getDocs(q);
+
+const rows = snap.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
+
+if(currentRole!=="admin" && id!=="admissions") {
+rows.sort((a,b)=>{
+const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+return tb-ta;
+});
+}
+
+area.innerHTML = `<h3>${labels[id]||id}</h3>`;
+
+if(id==="admissions") {
+
+area.innerHTML += "<p>यहाँ ऑनलाइन प्रवेश आवेदन दिखाई देंगे।</p>";
+
+area.innerHTML += rows.length
+? rows.map(r=>admissionMarkup(r)).join("")
+: "<p class='notice'>अभी कोई आवेदन उपलब्ध नहीं है।</p>";
+
+return;
+
+}
+
+if(currentRole==="admin") {
+area.innerHTML += formMarkup(id);
+}
+
+area.innerHTML += rows.length
+? rows.map(r=>recordMarkup(id,r)).join("")
+: "<p class='notice'>अभी कोई रिकॉर्ड उपलब्ध नहीं है।</p>";
+
+} catch(e) {
+
+area.innerHTML =
+`<p class="notice">डेटा लोड नहीं हुआ: ${esc(e.message)}<br>Firebase Rules और user role जाँचें।</p>`;
+
+}
+
+};
+
+
+function admissionMarkup(r) {
+
+return `<article class="item">
+
+<p><b>विद्यार्थी का नाम:</b> ${esc(r.studentName)}</p>
+<p><b>जन्मतिथि:</b> ${esc(r.dob)}</p>
+<p><b>कक्षा:</b> ${esc(r.admissionClass)}</p>
+<p><b>पिता का नाम:</b> ${esc(r.fatherName)}</p>
+<p><b>माता का नाम:</b> ${esc(r.motherName)}</p>
+<p><b>मोबाइल:</b> ${esc(r.parentMobile)}</p>
+<p><b>पता:</b> ${esc(r.studentAddress)}</p>
+
+<small class="muted">Application ID: ${esc(r.id)}</small>
+
+${currentRole==="admin"?
+`<button class="danger" onclick="removeRecord('admissions','${r.id}')">Delete</button>`:""}
+
+</article>`;
+
+}
+
+
+function formMarkup(id) {
+
+const fields = schemas[id]||[];
+
+return `<form id="recordForm" class="box">
+
+<h4>नया रिकॉर्ड जोड़ें</h4>
+
+<div class="row">
+
+${fields.map(k=>`
+
+<label>${fieldLabels[k]||k}
+
+<input name="${k}"
+${k==="date"?"type=date":""}
+${["title","studentName","className"].includes(k)?"required":""}>
+
+</label>
+
+`).join("")}
+
+</div>
+
+<label>Visibility / कौन देख सकता है?</label>
+
+<select name="visibility">
+<option value="private">Private – केवल Admin</option>
+<option value="public">Public – सभी लोग</option>
+</select>
+
+<label>File (optional)</label>
+<input type="file" name="attachment">
+
+<button type="submit">Save Record</button>
+
+<p id="recordMsg"></p>
+
+</form>`;
+
+}
+
+
+function recordMarkup(id,r) {
+
+const content = schemas[id]?.map(k=>
+`<p><b>${esc(fieldLabels[k]||k)}:</b> ${esc(r[k])}</p>`
+).join("")||"";
+
+const file = r.filePath
+? `<p><button type="button" onclick="downloadSecureFile('${esc(r.filePath)}','${esc(r.fileName||'school-file')}')">Open / Download attachment</button></p>`
+:"";
+
+const del = currentRole==="admin"
+? `<button class="danger" onclick="removeRecord('${id}','${r.id}')">Delete</button>`
+:"";
+
+const badge = r.visibility==="public"?"Public":"Private";
+
+return `<article class="item">
+
+${content}
+
+<small class="muted">Visibility: ${badge} · Record ID: ${esc(r.id)}</small>
+
+${file}
+${del}
+
+</article>`;
+
+}
+
+
 document.addEventListener("submit",async e=>{
- if(e.target.id!=="recordForm")return;e.preventDefault();
- const id=currentTab,form=e.target,fd=new FormData(form),data={};
- (schemas[id]||[]).forEach(k=>data[k]=String(fd.get(k)||"").trim());
- data.visibility=String(fd.get("visibility")||"private");
- data.createdAt=serverTimestamp();data.createdBy=auth.currentUser.uid;
- try{
-  const file=fd.get("attachment");
-  if(file&&file.size)throw new Error("File upload अभी चालू नहीं है। फिलहाल केवल टेक्स्ट रिकॉर्ड सेव करें।");
-  await addDoc(collection(db,id),data);await renderTab(id);
- }catch(err){document.getElementById("recordMsg").textContent=err.message;}
+
+if(e.target.id!=="recordForm") return;
+
+e.preventDefault();
+
+const id = currentTab;
+const form = e.target;
+const fd = new FormData(form);
+const data = {};
+
+(schemas[id]||[]).forEach(k=>
+data[k] = String(fd.get(k)||"").trim()
+);
+
+data.visibility = String(fd.get("visibility")||"private");
+data.createdAt = serverTimestamp();
+data.createdBy = auth.currentUser.uid;
+
+try {
+
+const file = fd.get("attachment");
+
+if(file && file.size) {
+throw new Error("File upload अभी चालू नहीं है। फिलहाल केवल टेक्स्ट रिकॉर्ड सेव करें।");
+}
+
+await addDoc(collection(db,id),data);
+
+await renderTab(id);
+
+} catch(err) {
+
+document.getElementById("recordMsg").textContent = err.message;
+
+}
+
 });
-window.downloadSecureFile=async(path,name)=>{
- try{
-  const blob=await getBlob(ref(storage,path));
-  const url=URL.createObjectURL(blob);const a=document.createElement("a");
-  a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
- }catch(e){alert("File access नहीं मिला: "+e.message);}
+
+
+window.downloadSecureFile = async(path,name) => {
+
+try {
+
+const blob = await getBlob(ref(storage,path));
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = name;
+a.click();
+
+URL.revokeObjectURL(url);
+
+} catch(e) {
+
+alert("File access नहीं मिला: "+e.message);
+
+}
+
 };
-window.removeRecord=async(id,recordId)=>{
- if(currentRole!=="admin"||!confirm("क्या आप यह रिकॉर्ड हटाना चाहते हैं?"))return;
- try{
-  const snap=await getDoc(doc(db,id,recordId));
-  if(snap.exists()&&snap.data().filePath){
-   try{await deleteObject(ref(storage,snap.data().filePath));}catch(fileErr){}
-  }
-  await deleteDoc(doc(db,id,recordId));await renderTab(id);
- }catch(e){alert("Delete नहीं हुआ: "+e.message);}
+
+
+window.removeRecord = async(id,recordId) => {
+
+if(currentRole!=="admin" || !confirm("क्या आप यह रिकॉर्ड हटाना चाहते हैं?")) return;
+
+try {
+
+const snap = await getDoc(doc(db,id,recordId));
+
+if(snap.exists() && snap.data().filePath) {
+try {
+await deleteObject(ref(storage,snap.data().filePath));
+} catch(fileErr) {}
+}
+
+await deleteDoc(doc(db,id,recordId));
+
+await renderTab(id);
+
+} catch(e) {
+
+alert("Delete नहीं हुआ: "+e.message);
+
+}
+
 };
-window.openAdmission=()=>document.getElementById("admissionModal").style.display="flex";
-window.closeAdmission=()=>document.getElementById("admissionModal").style.display="none";
+
+
+window.openAdmission = () => {
+document.getElementById("admissionModal").style.display = "flex";
+};
+
+window.closeAdmission = () => {
+document.getElementById("admissionModal").style.display = "none";
+};
+
+
 document.getElementById("admissionForm").addEventListener("submit",async e=>{
- e.preventDefault();const msg=document.getElementById("admissionMsg");msg.textContent="Submitting...";
- const data={studentName:aName.value.trim(),dob:aDob.value,admissionClass:aClass.value,fatherName:aFather.value.trim(),motherName:aMother.value.trim(),parentMobile:aMobile.value.trim(),studentAddress:aAddress.value.trim(),submittedAt:serverTimestamp()};
- try{await addDoc(collection(db,"admissions"),data);msg.textContent="आवेदन सफलतापूर्वक जमा हो गया है।";e.target.reset();}
- catch(err){msg.textContent="आवेदन जमा नहीं हुआ: "+err.message;}
-});
-window.publicInfo=async id=>{
- const box=document.getElementById("publicResults");box.classList.remove("hidden");box.innerHTML=`<h3>${labels[id]}</h3><p>कृपया उपलब्ध सार्वजनिक जानकारी देखें।</p>`;
- try{const snap=await getDocs(query(collection(db,id),where("visibility","==","public"),orderBy("createdAt","desc")));box.innerHTML+=snap.docs.map(d=>recordMarkup(id,{id:d.id,...d.data()})).join("")||"<p>अभी कोई सार्वजनिक सूचना उपलब्ध नहीं है।</p>";}
- catch(e){box.innerHTML+="<p>जानकारी अभी उपलब्ध नहीं है।</p>";}
+
+e.preventDefault();
+
+const msg = document.getElementById("admissionMsg");
+msg.textContent = "Submitting...";
+
+const data = {
+
+studentName:document.getElementById("aName").value.trim(),
+dob:document.getElementById("aDob").value,
+admissionClass:document.getElementById("aClass").value,
+fatherName:document.getElementById("aFather").value.trim(),
+motherName:document.getElementById("aMother").value.trim(),
+parentMobile:document.getElementById("aMobile").value.trim(),
+studentAddress:document.getElementById("aAddress").value.trim(),
+submittedAt:serverTimestamp()
+
 };
+
+try {
+
+await addDoc(collection(db,"admissions"),data);
+
+msg.textContent = "आवेदन सफलतापूर्वक जमा हो गया है।";
+
+e.target.reset();
+
+} catch(err) {
+
+msg.textContent = "आवेदन जमा नहीं हुआ: "+err.message;
+
+}
+
+});
+
+
+window.publicInfo = async(id) => {
+
+const box = document.getElementById("publicResults");
+
+box.classList.remove("hidden");
+
+box.innerHTML = `<h3>${labels[id]}</h3><p>कृपया उपलब्ध सार्वजनिक जानकारी देखें।</p>`;
+
+try {
+
+const snap = await getDocs(
+query(
+collection(db,id),
+where("visibility","==","public")
+)
+);
+
+const rows = snap.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
+
+rows.sort((a,b)=>{
+
+const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+
+return tb-ta;
+
+});
+
+box.innerHTML += rows.length
+? rows.map(r=>recordMarkup(id,r)).join("")
+: "<p>अभी कोई सार्वजनिक सूचना उपलब्ध नहीं है।</p>";
+
+} catch(e) {
+
+box.innerHTML += `<p>जानकारी लोड नहीं हुई: ${esc(e.message)}</p>`;
+
+}
+
+};
+
 </script>
-</body></html>
+</body>
+</html>
