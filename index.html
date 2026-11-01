@@ -340,7 +340,7 @@ function closeAdminLogin() {
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
  import { getAuth, signInWithEmailAndPassword,signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -409,6 +409,19 @@ window.adminLoginUser = async function() {
 
     }
 
+};
+window.saveAdmissionApplication = async function(data) {
+  try {
+    await addDoc(collection(db, "admissions"), {
+      ...data,
+      submittedAt: serverTimestamp()
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Admission Save Error:", error);
+    return false;
+  }
 };
 </script>
 <!-- ONLINE ADMISSION SECTION -->
@@ -507,33 +520,44 @@ style="position:absolute;right:15px;top:15px;background:red;color:white;border:n
 </style>
 
 <script>
-document.getElementById("admissionForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+document.getElementById("admissionForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-  const fields = [
-    ["Student Name", "studentName"],
-    ["Date of Birth", "dob"],
-    ["Admission For", "admissionClass"],
-    ["Father's Name", "fatherName"],
-    ["Mother's Name", "motherName"],
-    ["Mobile Number", "parentMobile"],
-    ["Address", "studentAddress"]
-  ];
+    const fields = [
+        ["Student Name", "studentName"],
+        ["Date of Birth", "dob"],
+        ["Admission For", "admissionClass"],
+        ["Father's Name", "fatherName"],
+        ["Mother's Name", "motherName"],
+        ["Mobile Number", "parentMobile"],
+        ["Address", "studentAddress"]
+    ];
 
-  let message = "MN CHILDRENS RISING SCHOOL - ADMISSION APPLICATION\n\n";
+    let message = "MN CHILDRENS RISING SCHOOL - ADMISSION APPLICATION\n\n";
+    const applicationData = {};
 
-  fields.forEach(function(field) {
-    message += field[0] + ": " +
-      document.getElementById(field[1]).value + "\n";
-  });
+    fields.forEach(function(field) {
+        const value = document.getElementById(field[1]).value;
+        message += field[0] + ": " + value + "\n";
+        applicationData[field[1]] = value;
+    });
 
-  const whatsappLink =
-    "https://wa.me/917290929593?text=" + encodeURIComponent(message);
+    const saved = await window.saveAdmissionApplication(applicationData);
 
-  document.getElementById("admissionMessage").innerText =
-    "WhatsApp में आवेदन तैयार है। Send दबाकर स्कूल को भेजें।";
+    if (!saved) {
+        alert("आवेदन सेव नहीं हो पाया। कृपया दोबारा प्रयास करें।");
+        return;
+    }
 
-  window.open(whatsappLink, "_blank");
+    document.getElementById("admissionMessage").innerText =
+        "✅ आपका आवेदन सफलतापूर्वक जमा हो गया है!";
+
+    alert("✅ आपका आवेदन सफलतापूर्वक जमा हो गया है!");
+
+    const whatsappLink =
+        "https://wa.me/917290929593?text=" + encodeURIComponent(message);
+
+    window.open(whatsappLink, "_blank");
 });
 function openAdmissionPopup() {
   const form = document.getElementById("onlineAdmission");
