@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "MN CHILDRENS RISING SCHOOL",
+  "short_name": "MNCR SCHOOL",
+  "description": "Official school app for MN CHILDRENS RISING SCHOOL, Deora, Khatkhari, Mauganj, Madhya Pradesh.",
+  "lang": "hi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1f5fb",
+  "theme_color": "#0756b9",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
